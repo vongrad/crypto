@@ -1,0 +1,22 @@
+.container {
+    margin-top: 32px;
+    padding: 32px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    background-color: #FFF;
+}
+
+.listings {
+    margin-top: 24px;
+}
+
+.listings table tr.active td, .listings table tr:hover td {
+    background-color: #DCDCDC;
+    cursor: pointer;
+}
+
+.error {
+    color:  red;
+    font-size: 13px;
+}
