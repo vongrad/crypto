@@ -42,26 +42,26 @@ export class AppComponent implements OnInit {
     listedCurrencies = [
         {
             'from': 'BTC',
-            'to': 'EUR',
+            'to': 'USD',
             'price': 0
         }
     ];
 
     listedCurrenciesMappingIndex = 0;
     listedCurrenciesMapping = {
-        'BTCEUR': this.listedCurrenciesMappingIndex++
+        'BTCUSD': this.listedCurrenciesMappingIndex++
     };
 
     /**
      * Currency tracked currency key
      * @type {string}
      */
-    trackedCurrencyKey = 'BTCEUR';
+    trackedCurrencyKey = 'BTCUSD';
 
     currencyFrom: string;
     currencyTo: string;
 
-    error: '';
+    error: string;
 
     constructor(private socketService: SocketService, private currencyService: CurrencyService) { }
 
@@ -85,7 +85,7 @@ export class AppComponent implements OnInit {
                 marginRight: 10
             },
             title: {
-                text: 'Live BTC/EUR rate'
+                text: 'Live BTC/USD rate'
             },
             xAxis: {
                 title: {
@@ -118,7 +118,7 @@ export class AppComponent implements OnInit {
             },
             series: [{
                 id: 'series-0',
-                name: 'BTC/EUR',
+                name: 'BTC/USD',
                 data: []
             }]
         });
@@ -134,7 +134,7 @@ export class AppComponent implements OnInit {
                 }
             });
 
-        this.socketService.subscribe(['2~Bitstamp~BTC~EUR']);
+        this.socketService.subscribe(['2~Bitstamp~BTC~USD']);
     }
 
     /**
@@ -154,7 +154,7 @@ export class AppComponent implements OnInit {
         highchart.addSeries({
             id: 'series-0',
             name: from + '/' + to,
-            data: [{ x: new Date(), y: currency.price }]
+            data: [{ x: new Date().getTime(), y: currency.price }]
         }, true);
 
         highchart.setTitle({ text: 'Live ' + from + '/' + to + ' rate'});
@@ -168,7 +168,6 @@ export class AppComponent implements OnInit {
     updateCurrencyListings(detail) {
         const index = this.listedCurrenciesMapping[detail.fromSymbol + detail.toSymbol];
         this.listedCurrencies[index]['price'] = detail.price;
-        this.listedCurrencies[index]['state'] = detail.flag;
     }
 
     /**
@@ -191,8 +190,7 @@ export class AppComponent implements OnInit {
             this.listedCurrencies.push({
                 'from': this.currencyFrom,
                 'to': this.currencyTo,
-                'price': 0,
-                'state': null
+                'price': 0
             });
             this.listedCurrenciesMapping[this.currencyFrom + this.currencyTo] = this.listedCurrenciesMappingIndex++;
             this.socketService.subscribe(['2~' + this.currencyExchangeMap[this.currencyFrom][this.currencyTo] +
